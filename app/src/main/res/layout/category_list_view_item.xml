@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_margin="40dp">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_gravity="center_horizontal">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="40dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/scrapBookBorder"
-            android:src="@drawable/temp_scrapbook_border"
+            android:src="@drawable/scrapbook_cover"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"/>
 
@@ -23,9 +25,9 @@
             android:textSize="20dp"
             android:textColor="@color/white"
             android:id="@+id/categoryName"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="25dp" />
+            android:layout_marginBottom="159dp"
+            android:layout_alignBottom="@+id/scrapBookBorder"
+            android:layout_centerHorizontal="true" />
 
     </RelativeLayout>
 </LinearLayout>

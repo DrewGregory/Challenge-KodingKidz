@@ -19,7 +19,7 @@ import android.support.v4.app.NavUtils;
  *
  * @see SystemUiHider
  */
-public class InsideScrapBook extends Activity {
+public class LeftPageAct extends Activity {
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.

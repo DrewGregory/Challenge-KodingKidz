@@ -13,6 +13,7 @@
         android:layout_height="0dp"
         android:layout_weight="3"
         android:text="add picture"
+        android:onClick="addPictureThroughtLibary"
         android:id="@+id/button"
         android:layout_gravity="center_horizontal"
         android:clickable="true"

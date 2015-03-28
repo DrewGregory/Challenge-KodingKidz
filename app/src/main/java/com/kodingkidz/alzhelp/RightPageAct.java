@@ -20,7 +20,6 @@ public class RightPageAct extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_right_page);
-        getSystemService()
         WindowManager wm  = this.getWindowManager();
         Rect rect = new Rect();
         wm.getDefaultDisplay().getRectSize(rect);

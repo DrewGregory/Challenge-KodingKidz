@@ -13,6 +13,7 @@ import android.widget.TextView;
 /**
  * Created by Drew Gregory on 3/5/2015.
  */
+//HELLO WORLD
 public class HomeScrapBookAdapter extends ArrayAdapter<String> implements AdapterView.OnItemClickListener{
     private Context context;
 

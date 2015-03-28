@@ -13,6 +13,6 @@
         android:id="@+id/imageView"
         android:src="@drawable/demo_pic_two"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

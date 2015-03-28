@@ -61,7 +61,7 @@ public class HomeScrapBookAdapter extends ArrayAdapter<String> implements Adapte
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent openBook = new Intent(getContext(), LeftPageAct.class);
+        Intent openBook = new Intent(getContext(), RightPageAct.class);
         context.startActivity(openBook);
     }
 }

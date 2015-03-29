@@ -36,4 +36,5 @@ public class AddPictureActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    //need to access libaryies
 }

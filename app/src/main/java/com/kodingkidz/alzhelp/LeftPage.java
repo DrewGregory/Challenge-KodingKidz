@@ -12,12 +12,12 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link com.kodingkidz.alzhelp.RightPage.RightOnFragmentListener} interface
+ * {@link com.kodingkidz.alzhelp.LeftPage.LeftOnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link RightPage#newInstance} factory method to
+ * Use the {@link LeftPage#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RightPage extends Fragment {
+public class LeftPage extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -27,7 +27,7 @@ public class RightPage extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private RightOnFragmentListener mListener;
+    private LeftOnFragmentInteractionListener mListener;
 
     /**
      * Use this factory method to create a new instance of
@@ -35,11 +35,11 @@ public class RightPage extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment RightPage.
+     * @return A new instance of fragment LeftPage.
      */
     // TODO: Rename and change types and number of parameters
-    public static RightPage newInstance(String param1, String param2) {
-        RightPage fragment = new RightPage();
+    public static LeftPage newInstance(String param1, String param2) {
+        LeftPage fragment = new LeftPage();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -47,7 +47,7 @@ public class RightPage extends Fragment {
         return fragment;
     }
 
-    public RightPage() {
+    public LeftPage() {
         // Required empty public constructor
     }
 
@@ -64,7 +64,7 @@ public class RightPage extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_right_page, container, false);
+        return inflater.inflate(R.layout.fragment_left_page, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -78,7 +78,7 @@ public class RightPage extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (RightOnFragmentListener) activity;
+            mListener = (LeftOnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -101,7 +101,7 @@ public class RightPage extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface RightOnFragmentListener {
+    public interface LeftOnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }

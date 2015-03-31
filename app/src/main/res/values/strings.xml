@@ -13,5 +13,6 @@
     <string name="title_activity_right_page">RightPageAct</string>
     <string name="title_activity_add_picture">Add Picture</string>
     <string name="title_activity_add_description">Add Description</string>
+    <string name="title_activity_add_album">Add Album</string>
 
 </resources>

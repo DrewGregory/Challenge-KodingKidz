@@ -12,6 +12,15 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:text="Add Album"
+        android:onClick="addAlbum"
+        android:id="@+id/add_Album"
+        android:layout_weight="1"
+
+        />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:text="add picture"
         android:onClick="addPicture"
         android:id="@+id/add_picture"
@@ -27,5 +36,4 @@
         android:layout_weight="1"
 
       />
-
 </LinearLayout>

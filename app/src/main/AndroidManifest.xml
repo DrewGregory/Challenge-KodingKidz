@@ -37,11 +37,18 @@
         <activity
             android:name=".RightPageAct"
             android:label="Right Page"
-            android:theme="@style/AppTheme"></activity>
-
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".AddDescriptionActivity"
             android:label="@string/title_activity_add_description"
+            android:parentActivityName=".SettingsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kodingkidz.alzhelp.SettingsActivity" />
+        </activity>
+        <activity
+            android:name=".AddAlbumActivity"
+            android:label="@string/title_activity_add_album"
             android:parentActivityName=".SettingsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

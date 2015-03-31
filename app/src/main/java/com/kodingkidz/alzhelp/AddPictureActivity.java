@@ -36,5 +36,5 @@ public class AddPictureActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    //need to access libaries
+    //i found a tutarail to access libaries(danny)
 }

@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:weightSum="2">
     <fragment
-        android:id="@+id/little_left_page"
+        android:id="@+id/little_page"
         android:name="com.kodingkidz.alzhelp.LeftPage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>

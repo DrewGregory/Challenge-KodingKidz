@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/right_page_fragment_container"
     android:background="@drawable/open_book_right"
     tools:context="com.kodingkidz.alzhelp.RightPage">
 

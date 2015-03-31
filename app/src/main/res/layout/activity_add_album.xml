@@ -21,7 +21,7 @@
     <Button
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="3"
+        android:layout_weight="1"
         android:text="Blue"
         android:onClick="BlueAlbum"
         android:id="@+id/BlueAlbum"
@@ -31,7 +31,7 @@
     <Button
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="3"
+        android:layout_weight="1"
         android:text="Green"
         android:onClick="GreenAlbum"
         android:id="@+id/GreenAlbum"
@@ -41,7 +41,7 @@
     <Button
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="3"
+        android:layout_weight="1"
         android:text="Red"
         android:onClick="RedAlbum"
         android:id="@+id/RedAlbum"

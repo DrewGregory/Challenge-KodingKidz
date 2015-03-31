@@ -1,18 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">LiScrapBook</string>
+
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
     <string name="title_activity_inside_scrap_book">InsideScrapBook</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+<!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_right_page">RightPageAct</string>
-    <string name="title_activity_add_picture">Add Picture</string>
-    <string name="title_activity_add_description">Add Description</string>
-    <string name="title_activity_add_album">Add Album</string>
-
 </resources>

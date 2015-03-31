@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".InsideScrapBook"
+            android:name=".LeftPageAct"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_inside_scrap_book"
             android:parentActivityName=".MainActivity"
@@ -27,32 +27,8 @@
                 android:value="MainActivity" />
         </activity>
         <activity
-            android:name=".AddPictureActivity"
-            android:label="@string/title_activity_add_picture"
-            android:parentActivityName=".SettingsActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.kodingkidz.alzhelp.SettingsActivity" />
-        </activity>
-        <activity
             android:name=".RightPageAct"
-            android:label="Right Page"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".AddDescriptionActivity"
-            android:label="@string/title_activity_add_description"
-            android:parentActivityName=".SettingsActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.kodingkidz.alzhelp.SettingsActivity" />
-        </activity>
-        <activity
-            android:name=".AddAlbumActivity"
-            android:label="@string/title_activity_add_album"
-            android:parentActivityName=".SettingsActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.kodingkidz.alzhelp.SettingsActivity" />
+            android:label="@string/title_activity_right_page" >
         </activity>
     </application>
 

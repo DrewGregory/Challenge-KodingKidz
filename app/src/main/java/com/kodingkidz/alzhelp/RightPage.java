@@ -18,10 +18,12 @@ import android.widget.TextView;
  * Use the {@link RightPage#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RightPage extends Fragment {
+public class RightPage extends android.support.v4.app.Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String PAGE = "The Page";
-
+    //TODO: Replace this test code with the actual, customizable descriptions to come.
+    static String[] descs = {"A picture of my grandparents.", "A picture of the Gaffneys, the Mylanders, and others.", "The whole third generation! Andrew, Mac, Paige, Elias, Drew, John, Sara, and Adam."};
+    public static  final int NUM_PAGES = descs.length;
     private String currentDesc;
     private TextView descText;
 
@@ -49,8 +51,11 @@ public class RightPage extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            int pos = getArguments().getInt(PAGE, 1) + 1;
-            currentDesc = descs[pos];
+            int pos = getArguments().getInt(PAGE, 1);
+            if (pos >= 0 && pos < descs.length)
+                currentDesc = descs[pos];
+            else
+                currentDesc = descs[1];
         }
     }
 
@@ -75,6 +80,5 @@ public class RightPage extends Fragment {
     }
 
 
-    //TODO: Replace this test code with the actual, customizable descriptions to come.
-    String[] descs = {"A picture of my grandparents.", "A picture of the Gaffneys, the Mylanders, and others.", "The whole third generation! Andrew, Mac, Paige, Elias, Drew, John, Sara, and Adam."};
+
 }

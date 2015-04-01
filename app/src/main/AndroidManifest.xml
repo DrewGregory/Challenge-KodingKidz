@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LeftPageAct"
+            android:name=".InsideScrapBook"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_inside_scrap_book"
             android:parentActivityName=".MainActivity"
@@ -26,10 +26,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="MainActivity" />
         </activity>
-        <activity
-            android:name=".RightPageAct"
-            android:label="@string/title_activity_right_page" >
-        </activity>
+
     </application>
 
 </manifest>

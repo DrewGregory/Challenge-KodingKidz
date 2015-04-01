@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -12,55 +11,51 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link LeftPage#newInstance} factory method to
+ * Activities that contain this fragment must implement the
+ * {@link com.kodingkidz.alzhelp.LandscapePagesFragment.OnLandscapeFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link LandscapePagesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LeftPage extends android.support.v4.app.Fragment {
-
-    private static final String ARG_POSITION = "Right Page Position";
+public class LandscapePagesFragment extends android.support.v4.app.Fragment {
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String POSITION = "position";
+    private int position;
+    //TODO Replace these arrays with a dynamic list.
     static int[] picIds = {R.drawable.demo_pic_one, R.drawable.demo_pic_two, R.drawable.demo_pic_three};
-    public static final int NUM_PAGES = picIds.length;
+    static String[] descs = {"A picture of my grandparents.", "A picture of the Gaffneys, the Mylanders, and others.", "The whole third generation! Andrew, Mac, Paige, Elias, Drew, John, Sara, and Adam."};
 
-    ImageView currentImage;
-    int imageID;
+    private OnLandscapeFragmentInteractionListener mListener;
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param pos The current page position, not counting right pages.
-     * @return A new instance of fragment LeftPage.
+     * @param pos position (page # of right / 2 - 1)
+     * @return A new instance of fragment LandscapePagesFragment.
      */
-    public static LeftPage newInstance(int pos) {
-        LeftPage fragment = new LeftPage();
+    public static LandscapePagesFragment newInstance(int pos) {
+        LandscapePagesFragment fragment = new LandscapePagesFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_POSITION, pos);
+        args.putInt(POSITION, pos);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public LeftPage() {
-        Bundle args = new Bundle();
-        args.putInt(ARG_POSITION, 1);
-        setArguments(args);
+    public LandscapePagesFragment() {
+        // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            int pos = getArguments().getInt(ARG_POSITION);
-            if (pos >= 1 && pos <= picIds.length){
-                imageID = picIds[pos - 1];
-            } else if (pos > picIds.length){
-                imageID = picIds[picIds.length - 1];
-            } else {
-                 imageID = picIds[0];
-            }
+            position =  getArguments().getInt(POSITION, 0);
         }
     }
 
@@ -68,23 +63,48 @@ public class LeftPage extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_left_page, container, false);
-        currentImage = (ImageView) view.findViewById(R.id.image);
-        currentImage.setImageBitmap(decodeSampledBitmapFromResource(getResources(), imageID, 500, 500));
+        View view = inflater.inflate(R.layout.fragment_landscape_pages, container, false);
+        ImageView image = (ImageView) view.findViewById(R.id.image);
+        TextView text = (TextView) view.findViewById(R.id.text);
+        image.setImageBitmap(decodeSampledBitmapFromResource(getResources(), picIds[position], 500, 500));
+        text.setText(descs[position]);
+        TextView pLeftNum = (TextView) view.findViewById(R.id.land_left_page_num);
+        TextView pRightNum = (TextView) view.findViewById(R.id.land_right_page_num);
+        pLeftNum.setText((position + 1)* 2 - 1 + "");
+        pRightNum.setText((position + 1) * 2 + "");
         return view;
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        try {
+            mListener = (OnLandscapeFragmentInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnLandscapeFragmentInteractionListener");
+        }
     }
 
     @Override
     public void onDetach() {
-
         super.onDetach();
+        mListener = null;
     }
 
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p/>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnLandscapeFragmentInteractionListener {
+        //TODO Add something in here if I need Activity interaction.
+    }
     /**
      * From Android Developer's Website.
      * Loads Bitmap with appropriate size, using calculateInSampleSize()
@@ -111,8 +131,8 @@ public class LeftPage extends android.support.v4.app.Fragment {
     }
 
     /**
-    From Android Developer's Website
-    Calculates InSampleSize argument.
+     From Android Developer's Website
+     Calculates InSampleSize argument.
      */
     public static int calculateInSampleSize(
             BitmapFactory.Options options, int reqWidth, int reqHeight) {
@@ -136,7 +156,6 @@ public class LeftPage extends android.support.v4.app.Fragment {
 
         return inSampleSize;
     }
-
 
 
 }

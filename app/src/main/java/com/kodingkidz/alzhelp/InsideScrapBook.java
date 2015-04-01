@@ -1,93 +1,100 @@
 package com.kodingkidz.alzhelp;
 
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.VelocityTrackerCompat;
+import android.support.v4.view.ViewPager;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
+import android.view.View;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 
-public class InsideScrapBook extends FragmentActivity {
-    private VelocityTracker mVelocityTracker = null;
+public class InsideScrapBook extends FragmentActivity implements LandscapePagesFragment.OnLandscapeFragmentInteractionListener {
+    private final String LEFT_PAGE = "Left", RIGHT_PAGE = "right";
     boolean portraitOrientation;
-    int currentPos = 1;
+    /**
+     * The number of pages.
+     */
+    private static final int NUM_PAGES = Math.min(LeftPage.NUM_PAGES, RightPage.NUM_PAGES);
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        int index = event.getActionIndex();
-        int action = event.getActionMasked();
-        int pointerId = event.getPointerId(index);
-        switch (action) {
-            case MotionEvent.ACTION_DOWN:
-                if (mVelocityTracker == null) {
-                    // Retrieve a new VelocityTracker object to watch the velocity of a motion.
-                    mVelocityTracker = VelocityTracker.obtain();
-                } else {
-                    // Reset the velocity tracker back to its initial state.
-                    mVelocityTracker.clear();
-                }
-                // Add a user's movement to the tracker.
-                mVelocityTracker.addMovement(event);
-                break;
-            case MotionEvent.ACTION_MOVE:
-                FragmentManager fragMan = getFragmentManager();
-                mVelocityTracker.addMovement(event);
-                // When you want to determine the velocity, call
-                // computeCurrentVelocity(). Then call getXVelocity()
-                // and getYVelocity() to retrieve the velocity for each pointer ID.
-                mVelocityTracker.computeCurrentVelocity(1);
-                // Log velocity of pixels per second
-                // Best practice to use VelocityTrackerCompat where possible.
-                if (VelocityTrackerCompat.getXVelocity(mVelocityTracker, pointerId) >= 1) {
-                    //Flip page to the right
-                    System.out.println("Turning page to the left.");
-                    currentPos--;
-                    if (currentPos != 0) {
-                        LeftPage newLeft = LeftPage.newInstance(currentPos);
-                        RightPage newRight = RightPage.newInstance(currentPos); //I already added 1 to currentPos in previous line.
-                        fragMan.beginTransaction().add(R.id.left_page_fragment_container, newLeft).commit();
-                        fragMan.beginTransaction().add(R.id.right_page_fragment_container, newRight).commit();
-                    } else {
-                        Intent home = new Intent(this, MainActivity.class);
-                        startActivity(home);
-                    }
-                } else if (VelocityTrackerCompat.getXVelocity(mVelocityTracker, pointerId) <= -1) {
-                    //Flip page to the left
-                    System.out.println("Turning page to the right.");
-                    ++currentPos;
-                    if (currentPos != 3) {
-                        LeftPage newLeft = LeftPage.newInstance(currentPos);
-                        RightPage newRight = RightPage.newInstance(currentPos); //I already subtracted 1 to currentPos in previous line.
-                        fragMan.beginTransaction().add(R.id.left_page_fragment_container, newLeft).commit();
-                        fragMan.beginTransaction().add(R.id.right_page_fragment_container, newRight).commit();
-                    }
-                }
-                break;
-        }
-        return true;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_scrapbook);
         portraitOrientation = findViewById(R.id.little_page) != null;
-        /*FragmentManager fragMan = getFragmentManager();
-        fragMan.beginTransaction().add(R.id.left_page, new LeftPage()).commit();
-        fragMan.beginTransaction().add(R.id.right_page, new RightPage()).commit();*/
-
+        /*timer = new Timer();
+        timer.schedule(new TimerListener(), 100, 500);*/
+        if (!portraitOrientation) {
+            // Instantiate a ViewPager and a PagerAdapter.
+            ViewPager bothPages = (ViewPager) findViewById(R.id.big_left_page);
+            PagerAdapter bothPagesAdapter = new PageAdapter(getSupportFragmentManager(), LEFT_PAGE);
+            bothPages.setPageTransformer(false, new PageFlipAnimation());
+            bothPages.setAdapter(bothPagesAdapter);
+        }
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Trigger the initial hide() shortly after the activity has been
-        // created, to briefly hint to the user that UI controls
-        // are available.
+    private class PageAdapter extends FragmentStatePagerAdapter {
+        String pageType;
+        public PageAdapter(android.support.v4.app.FragmentManager fm, String rightOrLeft) {
+            super(fm);
+            pageType = rightOrLeft;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return LandscapePagesFragment.newInstance(position);
+        }
+
+        @Override
+        public int getCount() {
+            return NUM_PAGES;
+        }
     }
 
+    private class PageFlipAnimation implements ViewPager.PageTransformer {
+
+        @Override
+        public void transformPage(View page, float position) {
+            float percentage = 1 - Math.abs(position);
+            page.setCameraDistance(10000);
+            setVisibility(page, position);
+            setTranslation(page);
+            setRotation(page, position, percentage);
+        }
+
+        private void setVisibility(View page, float position) {
+            if (position < 0.5 && position > -0.5) {
+                page.setVisibility(View.VISIBLE);
+            } else {
+                page.setVisibility(View.INVISIBLE);
+            }
+        }
+
+        private void setTranslation(View page) {
+            ViewPager viewPager = (ViewPager) page.getParent();
+            int scroll = viewPager.getScrollX() - page.getLeft();
+            page.setTranslationX(scroll);
+        }
+
+
+        private void setRotation(View page, float position, float percentage) {
+            if (position > 0) {
+                page.setRotationY(-180 * (percentage + 1));
+            } else {
+                page.setRotationY(180 * (percentage + 1));
+            }
+        }
+    }
 
 }

@@ -38,15 +38,13 @@ public class AddAlbumActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+
 
         return super.onOptionsItemSelected(item);
     }
 
     public void createAlbum (View v) {
-        EditText name = (EditText) findViewById(R.id.albumName);
+        EditText name = (EditText) findViewById(R.id.albumNameText);
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putString(ALBUMS, prefs.getString(ALBUMS, "") + "\t" + name.getText().toString());

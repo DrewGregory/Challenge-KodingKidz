@@ -17,8 +17,8 @@ EditText NameText, DesciptionText;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_description);
 
-        NameText = (EditText) findViewById(R.id.NameText)
-        DesciptionText = (EditText) findViewById(R.id.DesciptionText)
+        NameText = (EditText) findViewById(R.id.NameText);
+        DesciptionText = (EditText) findViewById(R.id.DesciptionText);
 
 
         DesciptionText.addTextChangedListener(new TextWatcher() {

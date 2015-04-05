@@ -1,0 +1,2 @@
+include ':application'
+project(':application').projectDir = new File('app')

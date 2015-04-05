@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.lang.ref.WeakReference;
 
 
 /**
@@ -66,7 +69,7 @@ public class LandscapePagesFragment extends android.support.v4.app.Fragment {
         View view = inflater.inflate(R.layout.fragment_landscape_pages, container, false);
         ImageView image = (ImageView) view.findViewById(R.id.image);
         TextView text = (TextView) view.findViewById(R.id.text);
-        image.setImageBitmap(decodeSampledBitmapFromResource(getResources(), picIds[position], 500, 500));
+        new BitmapWorkerTask(image).execute();  //Uses ASyncTask to load Bitmap off UI Thread.
         text.setText(descs[position]);
         TextView pLeftNum = (TextView) view.findViewById(R.id.land_left_page_num);
         TextView pRightNum = (TextView) view.findViewById(R.id.land_right_page_num);
@@ -157,5 +160,37 @@ public class LandscapePagesFragment extends android.support.v4.app.Fragment {
         return inSampleSize;
     }
 
+
+    /*
+    From Android Developer's Website:
+    Loads Bitmap off the UI thread.
+     */
+    class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
+        private final WeakReference<ImageView> imageViewReference;
+        private int data = 0;
+
+        public BitmapWorkerTask(ImageView imageView) {
+            // Use a WeakReference to ensure the ImageView can be garbage collected
+            imageViewReference = new WeakReference<ImageView>(imageView);
+        }
+
+        // Decode image in background.
+        @Override
+        protected Bitmap doInBackground(Integer... params) {
+            data = picIds[position];
+            return decodeSampledBitmapFromResource(getResources(), data, 500, 500);
+        }
+
+        // Once complete, see if ImageView is still around and set bitmap.
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            if (imageViewReference != null && bitmap != null) {
+                final ImageView imageView = imageViewReference.get();
+                if (imageView != null) {
+                    imageView.setImageBitmap(bitmap);
+                }
+            }
+        }
+    }
 
 }

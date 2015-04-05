@@ -12,8 +12,8 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="album name"
-        android:id="@+id/albumName"
+        android:text="Album Name"
+        android:id="@+id/albumNameText"
         android:layout_weight="1" />
 
 
@@ -28,10 +28,8 @@
     tools:context="com.kodingkidz.alzhelp.AddAlbumActivity">
         <Button
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="120dp"
             android:text="red"
-            android:onClick="createAlbum"
-            android:layout_margin="20dp"
             android:id="@+id/redbutton"
             android:layout_weight="1"
             style="?android:attr/borderlessButtonStyle"
@@ -39,9 +37,8 @@
             />
         <Button
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="120dp"
             android:text="blue"
-            android:layout_margin="20dp"
             android:id="@+id/bluebutton"
             android:layout_weight="1"
             style="?android:attr/borderlessButtonStyle"
@@ -50,9 +47,8 @@
 
         <Button
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="120dp"
             android:text="green"
-            android:layout_margin="20dp"
             android:id="@+id/greenbutton"
             android:layout_weight="1"
             style="?android:attr/borderlessButtonStyle"

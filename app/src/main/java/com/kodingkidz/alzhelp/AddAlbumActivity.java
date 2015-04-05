@@ -1,12 +1,20 @@
 package com.kodingkidz.alzhelp;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.media.audiofx.BassBoost;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
 
 public class AddAlbumActivity extends ActionBarActivity {
+    final public String SHARED_PREFS = "KODING_KIDZ";
+    final public String ALBUMS = "Albums";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,5 +43,15 @@ public class AddAlbumActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void createAlbum (View v) {
+        EditText name = (EditText) findViewById(R.id.albumName);
+        SharedPreferences prefs = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putString(ALBUMS, prefs.getString(ALBUMS, "") + "\t" + name.getText().toString());
+        edit.apply();
+        Intent backToSettings = new Intent(this, SettingsActivity.class);
+        startActivity(backToSettings);
     }
 }

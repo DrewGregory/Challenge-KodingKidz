@@ -7,14 +7,21 @@
     android:orientation="vertical"
     tools:context="com.kodingkidz.alzhelp.SettingsActivity">
 
-    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/listView"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14pt"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Current Albums:"
+        android:id="@+id/textView"
+        android:layout_gravity="center_horizontal" />
+
+    <ListView
+        android:id="@+id/listOfCurrentAlbums"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/wood_background"
+        android:layout_height="0dp"
         android:smoothScrollbar="false"
-        tools:context=".MainActivity" />
+        android:layout_weight="5"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -24,22 +31,5 @@
         android:layout_weight="1"
 
         />
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:text="add picture"
-        android:onClick="addPicture"
-        android:id="@+id/add_picture"
-        android:layout_weight="1"
-      />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:text="Add desciption"
-        android:onClick="addDescription"
-        android:id="@+id/add_desc"
-        android:layout_weight="1"
-
-      />
 </LinearLayout>

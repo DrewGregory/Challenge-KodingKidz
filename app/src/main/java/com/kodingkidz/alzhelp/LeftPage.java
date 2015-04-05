@@ -6,12 +6,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.lang.ref.WeakReference;
 
 
 /**
@@ -26,16 +30,17 @@ public class LeftPage extends android.support.v4.app.Fragment {
     public static final int NUM_PAGES = picIds.length;
 
     ImageView currentImage;
-    int imageID;
+    int imageID, position;
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param pos The current page position, not counting right pages.
+     * @param pos The current page position, counting right pages.
      * @return A new instance of fragment LeftPage.
      */
     public static LeftPage newInstance(int pos) {
+
         LeftPage fragment = new LeftPage();
         Bundle args = new Bundle();
         args.putInt(ARG_POSITION, pos);
@@ -54,13 +59,9 @@ public class LeftPage extends android.support.v4.app.Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             int pos = getArguments().getInt(ARG_POSITION);
-            if (pos >= 1 && pos <= picIds.length){
-                imageID = picIds[pos - 1];
-            } else if (pos > picIds.length){
-                imageID = picIds[picIds.length - 1];
-            } else {
-                 imageID = picIds[0];
-            }
+            imageID = picIds[(pos - 1) / 2];
+            position = pos;
+
         }
     }
 
@@ -70,7 +71,9 @@ public class LeftPage extends android.support.v4.app.Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_left_page, container, false);
         currentImage = (ImageView) view.findViewById(R.id.image);
-        currentImage.setImageBitmap(decodeSampledBitmapFromResource(getResources(), imageID, 500, 500));
+        new BitmapWorkerTask(currentImage).execute(); //Loads Bitmap off UI thread.
+        TextView pageNum = (TextView) view.findViewById(R.id.port_left_page_num);
+        pageNum.setText(position + "");
         return view;
     }
 
@@ -88,9 +91,10 @@ public class LeftPage extends android.support.v4.app.Fragment {
     /**
      * From Android Developer's Website.
      * Loads Bitmap with appropriate size, using calculateInSampleSize()
-     * @param res Just call getResources() on this one.
-     * @param resId  The image resource, found with the R class
-     * @param reqWidth The width, in pixels, that we want.
+     *
+     * @param res       Just call getResources() on this one.
+     * @param resId     The image resource, found with the R class
+     * @param reqWidth  The width, in pixels, that we want.
      * @param reqHeight The height, in pixels, that we want.
      * @return the Bitmap we want to load.
      */
@@ -111,8 +115,8 @@ public class LeftPage extends android.support.v4.app.Fragment {
     }
 
     /**
-    From Android Developer's Website
-    Calculates InSampleSize argument.
+     * From Android Developer's Website
+     * Calculates InSampleSize argument.
      */
     public static int calculateInSampleSize(
             BitmapFactory.Options options, int reqWidth, int reqHeight) {
@@ -137,6 +141,36 @@ public class LeftPage extends android.support.v4.app.Fragment {
         return inSampleSize;
     }
 
+    /*
+        From Android Developer's Website:
+        Loads Bitmap off the UI thread.
+         */
+    class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
+        private final WeakReference<ImageView> imageViewReference;
+        private int data = 0;
 
+        public BitmapWorkerTask(ImageView imageView) {
+            // Use a WeakReference to ensure the ImageView can be garbage collected
+            imageViewReference = new WeakReference<>(imageView);
+        }
+
+        // Decode image in background.
+        @Override
+        protected Bitmap doInBackground(Integer... params) {
+            data = picIds[(position - 1) / 2];
+            return decodeSampledBitmapFromResource(getResources(), data, 500, 500);
+        }
+
+        // Once complete, see if ImageView is still around and set bitmap.
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            if (imageViewReference != null && bitmap != null) {
+                final ImageView imageView = imageViewReference.get();
+                if (imageView != null) {
+                    imageView.setImageBitmap(bitmap);
+                }
+            }
+        }
+    }
 
 }

@@ -26,12 +26,12 @@ public class RightPage extends android.support.v4.app.Fragment {
     public static  final int NUM_PAGES = descs.length;
     private String currentDesc;
     private TextView descText;
-
+    int position;
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param pos The current page position, not counting left pages.
+     * @param pos The current page number, counting left pages.
      * @return A new instance of fragment RightPage.
      */
     // TODO: Rename and change types and number of parameters
@@ -51,11 +51,8 @@ public class RightPage extends android.support.v4.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            int pos = getArguments().getInt(PAGE, 1);
-            if (pos >= 0 && pos < descs.length)
-                currentDesc = descs[pos];
-            else
-                currentDesc = descs[1];
+            position = getArguments().getInt(PAGE, 1);
+            currentDesc = descs[(position - 2) / 2];
         }
     }
 
@@ -66,6 +63,8 @@ public class RightPage extends android.support.v4.app.Fragment {
         View view = inflater.inflate(R.layout.fragment_right_page, container, false);
         descText = (TextView) view.findViewById(R.id.text);
         descText.setText(currentDesc);
+        TextView pageNum = (TextView) view.findViewById(R.id.port_right_page_num);
+        pageNum.setText(position + "");
         return view;
     }
 

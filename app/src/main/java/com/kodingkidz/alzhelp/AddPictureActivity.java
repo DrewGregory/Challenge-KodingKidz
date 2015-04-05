@@ -18,13 +18,14 @@ import android.widget.ImageButton;
 
 public class AddPictureActivity extends ActionBarActivity {
 EditText CaptionText
+Button addImage
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_picture);
 
         CaptionText = (EditText) findViewById(R.id.CaptionText)
-        final Button addImage = (ImageButton) findViewById(R.id.imageButton)
+        Button addImage = (ImageButton) findViewById(R.id.imageButton)
 
         CaptionText.addTextChangedListener(new TextWatcher() {
             @Override

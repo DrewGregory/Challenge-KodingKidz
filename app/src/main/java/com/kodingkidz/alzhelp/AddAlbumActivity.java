@@ -1,11 +1,13 @@
 package com.kodingkidz.alzhelp;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -13,15 +15,16 @@ import android.widget.ImageButton;
 
 public class AddAlbumActivity extends ActionBarActivity {
 EditText albumNameText
+Button blueButton, redButton, greenButton
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_album);
 
         albumNameText = (EditText) findViewById(R.id.CaptionText)
-        final Button blueButton = (ImageButton) findViewById(R.id.bluebutton)
-        final Button redButton = (ImageButton) findViewById(R.id.redButton)
-        final Button greenButton = (ImageButton) findViewById(R.id.greenButton)
+        blueButton = (Button) findViewById(R.id.bluebutton)
+        redButton = (Button) findViewById(R.id.redButton)
+        greenButton = (Button) findViewById(R.id.greenButton)
 
         albumNameText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -62,5 +65,9 @@ EditText albumNameText
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    public void setBlueButton (View button)
+    {
+        startActivity(new Intent(this, AddPictureActivity.class));
     }
 }

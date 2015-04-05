@@ -2,16 +2,43 @@ package com.kodingkidz.alzhelp;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
 
 public class AddAlbumActivity extends ActionBarActivity {
-
+EditText albumNameText
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_album);
+
+        albumNameText = (EditText) findViewById(R.id.CaptionText)
+        final Button blueButton = (ImageButton) findViewById(R.id.bluebutton)
+        final Button redButton = (ImageButton) findViewById(R.id.redButton)
+        final Button greenButton = (ImageButton) findViewById(R.id.greenButton)
+
+        albumNameText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                albumNameText.setEnabled(s.equals(""));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
 

@@ -12,8 +12,8 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="album name"
-        android:id="@+id/editText4"
+        android:hint="album name"
+        android:id="@+id/albumNameText"
         android:layout_weight="1" />
 
 
@@ -30,7 +30,7 @@
             android:layout_width="0dp"
             android:layout_height="120dp"
             android:text="red"
-            android:id="@+id/redbutton"
+            android:id="@+id/redButton"
             android:layout_weight="1"
             style="?android:attr/borderlessButtonStyle"
             android:background="@drawable/scrapbook_cover"
@@ -39,7 +39,7 @@
             android:layout_width="0dp"
             android:layout_height="120dp"
             android:text="blue"
-            android:id="@+id/bluebutton"
+            android:id="@+id/blueButton"
             android:layout_weight="1"
             style="?android:attr/borderlessButtonStyle"
             android:background="@drawable/scrapbook_cover"
@@ -49,7 +49,7 @@
             android:layout_width="0dp"
             android:layout_height="120dp"
             android:text="green"
-            android:id="@+id/greenbutton"
+            android:id="@+id/greenButton"
             android:layout_weight="1"
             style="?android:attr/borderlessButtonStyle"
             android:background="@drawable/scrapbook_cover"

@@ -13,17 +13,16 @@
         android:layout_height="0dp"
         android:id="@+id/imageButton"
         android:layout_weight="3"
-        android:src="@drawable/demo_pic_one"
         android:layout_gravity="center_horizontal"
         android:onClick="addPhoto"
-        />
+        android:background="@drawable/demo_pic_one" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="Caption"
-        android:id="@+id/editText3" />
+        android:hint="Caption"
+        android:id="@+id/CaptionText" />
 
     <HorizontalScrollView
         android:layout_width="match_parent"

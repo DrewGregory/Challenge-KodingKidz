@@ -2,11 +2,7 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="@style/Theme.AppCompat">
-       <item name="android:actionBarStyle">@style/mActionBarStyle</item>
-    </style>
 
-    <style name="mActionBarStyle" parent="@style/Widget.AppCompat.ActionBar">
-        <item name="android:background">#CC9900</item>
     </style>
 
 </resources>

@@ -10,7 +10,7 @@ import android.widget.EditText;
 
 
 public class AddDescriptionActivity extends ActionBarActivity {
-EditText NameText, DesciptionText;
+    EditText NameText, DesciptionText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ EditText NameText, DesciptionText;
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-              NameText.setEnabled(s.equals(""));
+                NameText.setEnabled(s.equals(""));
             }
 
             @Override

@@ -22,11 +22,18 @@ public class RightPage extends android.support.v4.app.Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String PAGE = "The Page";
     //TODO: Replace this test code with the actual, customizable descriptions to come.
-    static String[] descs = {"A picture of my grandparents.", "A picture of the Gaffneys, the Mylanders, and others.", "The whole third generation! Andrew, Mac, Paige, Elias, Drew, John, Sara, and Adam."};
-    public static  final int NUM_PAGES = descs.length;
+    static String[] descs;
+    public static int NUM_PAGES;
     private String currentDesc;
     private TextView descText;
     int position;
+
+
+
+    public static void setDescs (String[] descriptions) {
+        descs = descriptions;
+        NUM_PAGES = descs.length;
+    }
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -34,7 +41,6 @@ public class RightPage extends android.support.v4.app.Fragment {
      * @param pos The current page number, counting left pages.
      * @return A new instance of fragment RightPage.
      */
-    // TODO: Rename and change types and number of parameters
     public static RightPage newInstance(int pos) {
         RightPage fragment = new RightPage();
         Bundle args = new Bundle();
@@ -77,7 +83,6 @@ public class RightPage extends android.support.v4.app.Fragment {
     public void onDetach() {
         super.onDetach();
     }
-
 
 
 }

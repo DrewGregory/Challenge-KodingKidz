@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.audiofx.BassBoost;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,8 +14,8 @@ import android.widget.EditText;
 
 
 public class AddAlbumActivity extends ActionBarActivity {
-    final public String SHARED_PREFS = "KODING_KIDZ";
-    final public String ALBUMS = "Albums";
+    final public String SHARED_PREFS = "com.kodingkidz.alzhelp.sharedPreferences";
+    final public String ALBUMS = "com.kodingkidz.alzhelp.albums";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,17 +38,23 @@ public class AddAlbumActivity extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        switch (id) {
+            case android.R.id.home:
+                createAlbum(findViewById(R.id.add_Album));
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
 
 
         return super.onOptionsItemSelected(item);
     }
 
-    public void createAlbum (View v) {
+    public void createAlbum(View v) {
         EditText name = (EditText) findViewById(R.id.albumNameText);
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = prefs.edit();
-        edit.putString(ALBUMS, prefs.getString(ALBUMS, "") + "\t" + name.getText().toString());
+        String separator = "\t";
+        edit.putString(ALBUMS, prefs.getString(ALBUMS, "") + separator + name.getText().toString());
         edit.apply();
         Intent backToSettings = new Intent(this, SettingsActivity.class);
         startActivity(backToSettings);

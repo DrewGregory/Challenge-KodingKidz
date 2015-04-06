@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -12,6 +13,7 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,12 +28,16 @@ import java.lang.ref.WeakReference;
 public class LeftPage extends android.support.v4.app.Fragment {
 
     private static final String ARG_POSITION = "Right Page Position";
-    static int[] picIds = {R.drawable.demo_pic_one, R.drawable.demo_pic_two, R.drawable.demo_pic_three};
-    public static final int NUM_PAGES = picIds.length;
-
+    private static Bitmap[] pics;
+    public static int NUM_PAGES;
+    int screenWidth, screenLength;
     ImageView currentImage;
-    int imageID, position;
-
+    int position;
+    Bitmap image;
+    public static void setPics (Bitmap[] pictures) {
+        pics = pictures;
+        NUM_PAGES = pics.length;
+    }
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -59,10 +65,14 @@ public class LeftPage extends android.support.v4.app.Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             int pos = getArguments().getInt(ARG_POSITION);
-            imageID = picIds[(pos - 1) / 2];
+            image = pics[(pos - 1) / 2];
             position = pos;
-
         }
+        WindowManager wm = getActivity().getWindowManager();
+        Rect rect = new Rect();
+        wm.getDefaultDisplay().getRectSize(rect);
+        screenWidth = rect.width();
+        screenLength = rect.height();
     }
 
     @Override
@@ -71,7 +81,8 @@ public class LeftPage extends android.support.v4.app.Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_left_page, container, false);
         currentImage = (ImageView) view.findViewById(R.id.image);
-        new BitmapWorkerTask(currentImage).execute(); //Loads Bitmap off UI thread.
+        currentImage.setImageBitmap(image);
+        //new BitmapWorkerTask(currentImage).execute(); //Loads Bitmap off UI thread.
         TextView pageNum = (TextView) view.findViewById(R.id.port_left_page_num);
         pageNum.setText(position + "");
         return view;
@@ -157,8 +168,8 @@ public class LeftPage extends android.support.v4.app.Fragment {
         // Decode image in background.
         @Override
         protected Bitmap doInBackground(Integer... params) {
-            data = picIds[(position - 1) / 2];
-            return decodeSampledBitmapFromResource(getResources(), data, 500, 500);
+            //data = pics[(position - 1) / 2];
+            return decodeSampledBitmapFromResource(getResources(), data, screenWidth / 2, screenLength / 2);
         }
 
         // Once complete, see if ImageView is still around and set bitmap.

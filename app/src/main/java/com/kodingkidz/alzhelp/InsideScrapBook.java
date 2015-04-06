@@ -1,5 +1,10 @@
 package com.kodingkidz.alzhelp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -8,30 +13,52 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.view.WindowManager;
 
 
 public class InsideScrapBook extends FragmentActivity implements LandscapePagesFragment.OnLandscapeFragmentInteractionListener {
-    private final String LEFT_PAGE = "Left", RIGHT_PAGE = "right";
+    final public String SHARED_PREFS = "com.kodingkidz.alzhelp.sharedPreferences";
+    final public String ALBUM_NAME = "com.kodingkidz.alzhelp.albumName";
+    final public String ALBUM_DESCRIPTION = "com.kodingkidz.alzhelp.albumDescription";
+    final public String ALBUM_PICTURE_PATH = "com.kodingkidz.alzhelp.albumPicturePath";
     boolean portraitOrientation;
+    String[] descs;
+
+    SharedPreferences prefs;
     /**
      * The number of pages.
      */
-    private static final int LAND_NUM_PAGES = Math.min(LeftPage.NUM_PAGES, RightPage.NUM_PAGES);
-    private static final int PORT_NUM_PAGES = LeftPage.NUM_PAGES + RightPage.NUM_PAGES;
-
+    private static int LAND_NUM_PAGES;
+    private static int PORT_NUM_PAGES;
+    int screenWidth, screenLength;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_scrapbook);
         portraitOrientation = findViewById(R.id.port_page) != null;
-        /*timer = new Timer();
-        timer.schedule(new TimerListener(), 100, 500);*/
+        WindowManager wm = getWindowManager();
+        Rect rect = new Rect();
+        wm.getDefaultDisplay().getRectSize(rect);
+        screenWidth = rect.width();
+        screenLength = rect.height();
+        prefs = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        String albumName = getIntent().getStringExtra(ALBUM_NAME);
+        descs = toStringArray(prefs.getString(albumName + ALBUM_DESCRIPTION, ""));
+        String[] imagePaths = toStringArray(prefs.getString( albumName + ALBUM_PICTURE_PATH, ""));
+        Bitmap[] images = new Bitmap[imagePaths.length];
+        for (int index = 0; index < images.length; index++) {
+            images[index] = BitmapFactory.decodeFile(imagePaths[index]);
+        }
+        LeftPage.setPics(images);
+        RightPage.setDescs(descs);
+        LAND_NUM_PAGES = Math.min(LeftPage.NUM_PAGES, RightPage.NUM_PAGES);
+        PORT_NUM_PAGES = LeftPage.NUM_PAGES + RightPage.NUM_PAGES;
         if (!portraitOrientation) {
             // Instantiate a ViewPager and a PagerAdapter for landscape orientation.
             ViewPager bothPages = (ViewPager) findViewById(R.id.landscape_pages);
             PagerAdapter bothPagesAdapter = new LandscapePageAdapter(getSupportFragmentManager());
-            //bothPages.setPageTransformer(false, new LandscapePageAnimation()); Uncomment when I make an nice page flip animation.
+            //TODO bothPages.setPageTransformer(false, new LandscapePageAnimation()); Uncomment when we make an nice page flip animation.
             bothPages.setAdapter(bothPagesAdapter);
         } else {
             //This one is for portrait orientation.
@@ -42,6 +69,7 @@ public class InsideScrapBook extends FragmentActivity implements LandscapePagesF
         }
 
     }
+
     private class PortraitPageAdapter extends FragmentStatePagerAdapter {
 
         public PortraitPageAdapter(FragmentManager fm) {
@@ -54,11 +82,10 @@ public class InsideScrapBook extends FragmentActivity implements LandscapePagesF
                 return LeftPage.newInstance(position + 1);
             } else if (position == 1) {
                 return RightPage.newInstance(position + 1);
-            } else if (position/2.0 == position/2) {
+            } else if (position / 2.0 == position / 2) {
                 return LeftPage.newInstance(position + 1);
-            }
-            else
-            return RightPage.newInstance(position + 1);
+            } else
+                return RightPage.newInstance(position + 1);
         }
 
         @Override
@@ -66,6 +93,7 @@ public class InsideScrapBook extends FragmentActivity implements LandscapePagesF
             return PORT_NUM_PAGES;
         }
     }
+
     private class LandscapePageAdapter extends FragmentStatePagerAdapter {
 
         public LandscapePageAdapter(android.support.v4.app.FragmentManager fm) {
@@ -118,5 +146,21 @@ public class InsideScrapBook extends FragmentActivity implements LandscapePagesF
             }
         }
     }
+    /**
+     * We made this method because you can only store key values and not arrays in SharedPreferences.
+     * @param stringInOneLine just pass the string returned from SharedPreferences (with the tabs)
+     * @return the Album in its array, without the tabs.
+     */
+    String[] toStringArray (String stringInOneLine) {
 
+        String[] albumsInArray = stringInOneLine.split("\t");
+        //Because it adds a tab before the first album in the createAlbum() method, we have to remove the first element
+        String[] tempAlbums = new String[albumsInArray.length - 1];
+        if (albumsInArray.length > 0) {
+            for (int index = 1; index < albumsInArray.length; index++) {
+                tempAlbums[index - 1] = albumsInArray[index];
+            }
+        }
+        return tempAlbums;
+    }
 }

@@ -58,7 +58,7 @@ public class LandscapePagesFragment extends android.support.v4.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            position =  getArguments().getInt(POSITION, 0);
+            position = getArguments().getInt(POSITION, 0);
         }
     }
 
@@ -73,7 +73,7 @@ public class LandscapePagesFragment extends android.support.v4.app.Fragment {
         text.setText(descs[position]);
         TextView pLeftNum = (TextView) view.findViewById(R.id.land_left_page_num);
         TextView pRightNum = (TextView) view.findViewById(R.id.land_right_page_num);
-        pLeftNum.setText((position + 1)* 2 - 1 + "");
+        pLeftNum.setText((position + 1) * 2 - 1 + "");
         pRightNum.setText((position + 1) * 2 + "");
         return view;
     }
@@ -108,12 +108,14 @@ public class LandscapePagesFragment extends android.support.v4.app.Fragment {
     public interface OnLandscapeFragmentInteractionListener {
         //TODO Add something in here if I need Activity interaction.
     }
+
     /**
      * From Android Developer's Website.
      * Loads Bitmap with appropriate size, using calculateInSampleSize()
-     * @param res Just call getResources() on this one.
-     * @param resId  The image resource, found with the R class
-     * @param reqWidth The width, in pixels, that we want.
+     *
+     * @param res       Just call getResources() on this one.
+     * @param resId     The image resource, found with the R class
+     * @param reqWidth  The width, in pixels, that we want.
      * @param reqHeight The height, in pixels, that we want.
      * @return the Bitmap we want to load.
      */
@@ -134,8 +136,8 @@ public class LandscapePagesFragment extends android.support.v4.app.Fragment {
     }
 
     /**
-     From Android Developer's Website
-     Calculates InSampleSize argument.
+     * From Android Developer's Website
+     * Calculates InSampleSize argument.
      */
     public static int calculateInSampleSize(
             BitmapFactory.Options options, int reqWidth, int reqHeight) {

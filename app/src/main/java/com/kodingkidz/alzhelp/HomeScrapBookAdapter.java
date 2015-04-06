@@ -13,8 +13,9 @@ import android.widget.TextView;
 /**
  * Created by Drew Gregory on 3/5/2015.
  */
-public class HomeScrapBookAdapter extends ArrayAdapter<String> implements AdapterView.OnItemClickListener{
+public class HomeScrapBookAdapter extends ArrayAdapter<String>{
     private Context context;
+    final public String ALBUM_NAME = "com.kodingkidz.alzhelp.albumName";
 
     public HomeScrapBookAdapter(Context context, String[] categories) {
         super(context, R.layout.category_list_view_item, categories);
@@ -39,7 +40,6 @@ public class HomeScrapBookAdapter extends ArrayAdapter<String> implements Adapte
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView imageView;
         if (convertView == null) {  // if it's not recycled, initialize some attributes
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.category_list_view_item, parent, false);
@@ -59,9 +59,5 @@ public class HomeScrapBookAdapter extends ArrayAdapter<String> implements Adapte
     private String[] categories =
             {"Family", "Career", "Childhood", "School"};
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent openBook = new Intent(getContext(), InsideScrapBook.class);
-        context.startActivity(openBook);
-    }
+
 }

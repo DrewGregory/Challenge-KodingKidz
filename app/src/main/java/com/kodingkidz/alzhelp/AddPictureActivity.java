@@ -1,9 +1,13 @@
 package com.kodingkidz.alzhelp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.media.Image;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -40,6 +44,7 @@ import android.view.View;
 
 import android.widget.Button;
 
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import java.io.File;
@@ -54,13 +59,19 @@ import java.io.OutputStream;
 
 
 public class AddPictureActivity extends ActionBarActivity {
-
+    final public String SHARED_PREFS = "com.kodingkidz.alzhelp.sharedPreferences";
+    final public String ALBUM_NAME = "com.kodingkidz.alzhelp.albumName";
+    final public String ALBUM_PICTURE_PATH = "com.kodingkidz.alzhelp.albumPicturePath";
+    final public String ALBUM_DESCRIPTION = "com.kodingkidz.alzhelp.albumDescription";
+    String albumName, picturePath;
+    SharedPreferences prefs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_picture);
-        imageButton = (ImageView) findViewById(R.id.imageButton);
-
+        prefs = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        albumName = getIntent().getStringExtra(ALBUM_NAME);
+        imageButton = (ImageView) findViewById(R.id.addPictureImageView);
 
 
         imageButton.setOnClickListener(new View.OnClickListener() {
@@ -92,7 +103,17 @@ public class AddPictureActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == android.R.id.home) {
+            EditText descriptionInput = (EditText) findViewById(R.id.descriptionEditText);
+            String descriptionText = descriptionInput.getText().toString();
+            SharedPreferences.Editor editor = prefs.edit();
+            String separator = "\t";
+            String previousPathContent = prefs.getString(albumName + ALBUM_PICTURE_PATH, "");
+            editor.putString(albumName + ALBUM_PICTURE_PATH, previousPathContent + separator + picturePath);
+            String previousDescContent = prefs.getString(albumName + ALBUM_DESCRIPTION, "");
+            editor.putString(albumName + ALBUM_DESCRIPTION, previousDescContent + separator + descriptionText);
+            editor.apply();
+            NavUtils.navigateUpFromSameTask(this);
             return true;
         }
 
@@ -104,8 +125,12 @@ public class AddPictureActivity extends ActionBarActivity {
 
     private void selectImage() {
 
-
-        final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
+        /*Add "Take Photo", in the options array if you want to enable the user to take a photo.
+        * However, we would need to create a file in a retrievable place.
+        * I think it isn't necessary but the if statement is still there
+        * :-)
+        * */
+        final CharSequence[] options = {"Choose from Gallery", "Cancel"};
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(AddPictureActivity.this);
@@ -250,7 +275,7 @@ public class AddPictureActivity extends ActionBarActivity {
 
                 int columnIndex = c.getColumnIndex(filePath[0]);
 
-                String picturePath = c.getString(columnIndex);
+                picturePath = c.getString(columnIndex);
 
                 c.close();
 

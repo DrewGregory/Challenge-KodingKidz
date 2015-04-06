@@ -13,21 +13,20 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 
-public class SettingsActivity extends ActionBarActivity implements AdapterView.OnItemClickListener{
-    final public String SHARED_PREFS = "KODING_KIDZ";
-    final public String ALBUMS = "Albums";
-    //TODO: Change this static array into a dynamic array obtained from SharedPreferences
+public class SettingsActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
+    final public String SHARED_PREFS = "com.kodingkidz.alzhelp.sharedPreferences";
+    final public String ALBUMS = "com.kodingkidz.alzhelp.albums";
+    final public String ALBUM_NAME = "com.kodingkidz.alzhelp.albumName";
+    String[] albums;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         ListView lv = (ListView) findViewById(R.id.listOfCurrentAlbums);
-        String[] albums = prefs.getString(ALBUMS, "").split("\t");
-        if (albums[0].equals("")) {
-            albums = new String[0];
-        }
-        lv.setAdapter(new HomeScrapBookAdapter(this,albums));
+        albums = toAlbumArray(prefs.getString(ALBUMS, ""));
+        lv.setAdapter(new HomeScrapBookAdapter(this, albums));
         lv.setOnItemClickListener(this);
     }
 
@@ -53,21 +52,42 @@ public class SettingsActivity extends ActionBarActivity implements AdapterView.O
 
         return super.onOptionsItemSelected(item);
     }
-    public void addPicture (View button)
-    {
+
+    public void addPicture(View button) {
         startActivity(new Intent(this, AddPictureActivity.class));
     }
-    public void addDescription (View button)
-    {
+
+    public void addDescription(View button) {
         startActivity(new Intent(this, AddDescriptionActivity.class));
     }
-    public void addAlbum (View button)
-    {
+
+    public void addAlbum(View button) {
         startActivity(new Intent(this, AddAlbumActivity.class));
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //TODO Direct to an edit of the album.
+        Intent toEditAlbumActivity = new Intent(this, EditAlbumActivity.class);
+        toEditAlbumActivity.putExtra(ALBUM_NAME, albums[position]);
+        startActivity(toEditAlbumActivity);
+    }
+
+
+    /**
+     * We made this method because you can only store key values and not arrays in SharedPreferences.
+     * @param albumsInOneLine just pass the string returned from SharedPreferences (with the tabs)
+     * @return the Album in its array, without the tabs.
+     */
+    String[] toAlbumArray (String albumsInOneLine) {
+
+        String[] albumsInArray = albumsInOneLine.split("\t");
+        //Because it adds a tab before the first album in the createAlbum() method, we have to remove the first element
+        String[] tempAlbums = new String[albumsInArray.length - 1];
+        if (albumsInArray.length > 0) {
+            for (int index = 1; index < albumsInArray.length; index++) {
+                tempAlbums[index - 1] = albumsInArray[index];
+            }
+        }
+        return tempAlbums;
     }
 }

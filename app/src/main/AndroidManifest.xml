@@ -84,6 +84,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".SettingsActivity" />
         </activity>
+        <activity
+            android:name=".index"
+            android:label="@string/title_activity_index"
+            android:parentActivityName=".InsideScrapBook" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kodingkidz.alzhelp.InsideScrapBook" />
+        </activity>
     </application>
 
 </manifest>

@@ -15,5 +15,12 @@
         android:layout_weight="1"
         android:hint="search"
         android:onClick="search"
-        android:id="@+id/search" />
+        android:id="@+id/search"
+        />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="7">
+
+
+        </ScrollView>
 </LinearLayout>

@@ -2,9 +2,11 @@ package com.kodingkidz.alzhelp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -14,6 +16,9 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
+
+import java.lang.ref.WeakReference;
 
 
 public class InsideScrapBook extends FragmentActivity implements LandscapePagesFragment.OnLandscapeFragmentInteractionListener {
@@ -48,7 +53,7 @@ public class InsideScrapBook extends FragmentActivity implements LandscapePagesF
         String[] imagePaths = toStringArray(prefs.getString( albumName + ALBUM_PICTURE_PATH, ""));
         Bitmap[] images = new Bitmap[imagePaths.length];
         for (int index = 0; index < images.length; index++) {
-            images[index] = BitmapFactory.decodeFile(imagePaths[index]);
+            images[index] = decodeSampledBitmapFromResource(getResources(), 1, );
         }
         LeftPage.setPics(images);
         RightPage.setDescs(descs);
@@ -162,5 +167,92 @@ public class InsideScrapBook extends FragmentActivity implements LandscapePagesF
             }
         }
         return tempAlbums;
+    }
+
+
+
+    /**
+     * From Android Developer's Website.
+     * Loads Bitmap with appropriate size, using calculateInSampleSize()
+     *
+     * @param res       Just call getResources() on this one.
+     * @param resId     The image resource, found with the R class
+     * @param reqWidth  The width, in pixels, that we want.
+     * @param reqHeight The height, in pixels, that we want.
+     * @return the Bitmap we want to load.
+     */
+    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
+                                                         int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res, resId, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(res, resId, options);
+    }
+
+    /**
+     * From Android Developer's Website
+     * Calculates InSampleSize argument.
+     */
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+
+    /*
+        From Android Developer's Website:
+        Loads Bitmap off the UI thread.
+         */
+    class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
+        private final WeakReference<ImageView> imageViewReference;
+        private int data = 0;
+
+        public BitmapWorkerTask(ImageView imageView) {
+            // Use a WeakReference to ensure the ImageView can be garbage collected
+            imageViewReference = new WeakReference<>(imageView);
+        }
+
+        // Decode image in background.
+        @Override
+        protected Bitmap doInBackground(Integer... params) {
+            //data = pics[(position - 1) / 2];
+            return decodeSampledBitmapFromResource(getResources(), data, screenWidth / 2, screenLength / 2);
+        }
+
+        // Once complete, see if ImageView is still around and set bitmap.
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            if (imageViewReference != null && bitmap != null) {
+                final ImageView imageView = imageViewReference.get();
+                if (imageView != null) {
+                    imageView.setImageBitmap(bitmap);
+                }
+            }
+        }
     }
 }

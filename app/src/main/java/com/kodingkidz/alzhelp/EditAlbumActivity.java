@@ -112,7 +112,6 @@ public class EditAlbumActivity extends ActionBarActivity implements AdapterView.
      * @return the Album in its array, without the tabs.
      */
     String[] toStringArray (String stringInOneLine) {
-
         String[] albumsInArray = stringInOneLine.split("\t");
         //Because it adds a tab before the first album in the createAlbum() method, we have to remove the first element
         String[] tempAlbums = new String[albumsInArray.length - 1];

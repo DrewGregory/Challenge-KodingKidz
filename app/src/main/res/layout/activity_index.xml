@@ -17,10 +17,10 @@
         android:onClick="search"
         android:id="@+id/search"
         />
-    <ScrollView
+    <!--<ScrollView
         android:layout_width="match_parent"
-        android:layout_height="7">
+        android:layout_height="7dp">
 
 
-        </ScrollView>
+        </ScrollView> !-->
 </LinearLayout>

@@ -37,9 +37,9 @@ public class index extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    @Override
-    public void onClick(View search) {
-    onSearchRequested()
+
+    public void search(View v) {
+    onSearchRequested();
             //https://www.youtube.com/watch?v=EmOqp_uAtUQ
     }
 }

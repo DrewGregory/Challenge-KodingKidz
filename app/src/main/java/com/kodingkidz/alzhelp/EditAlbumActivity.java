@@ -24,9 +24,11 @@ public class EditAlbumActivity extends ActionBarActivity implements AdapterView.
     final public String ALBUM_NAME = "com.kodingkidz.alzhelp.albumName";
     final public String ALBUM_DESCRIPTION = "com.kodingkidz.alzhelp.albumDescription";
     final public String ALBUM_PICTURE_PATH = "com.kodingkidz.alzhelp.albumPicturePath";
+    final public String EDIT_PICTURE = "com.kodingkidz.alzhelp.editPicture";
     SharedPreferences prefs;
     String albumName;
     Picture[] pictures;
+    String[] imagePaths, descriptions;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,8 +36,8 @@ public class EditAlbumActivity extends ActionBarActivity implements AdapterView.
         prefs = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         albumName = getIntent().getStringExtra(ALBUM_NAME);
         setTitle("Edit " + albumName);
-        String[] descriptions = toStringArray(prefs.getString(albumName + ALBUM_DESCRIPTION, ""));
-        String[] imagePaths = toStringArray(prefs.getString( albumName + ALBUM_PICTURE_PATH, ""));
+        descriptions = toStringArray(prefs.getString(albumName + ALBUM_DESCRIPTION, ""));
+        imagePaths = toStringArray(prefs.getString( albumName + ALBUM_PICTURE_PATH, ""));
         pictures = new Picture[Math.min(descriptions.length, imagePaths.length)];
         for (int index = 0; index < pictures.length; index++) {
             pictures[index] = new Picture();
@@ -66,13 +68,18 @@ public class EditAlbumActivity extends ActionBarActivity implements AdapterView.
 
     public void addPicture (View v) {
         Intent toAddPicture = new Intent(this, AddPictureActivity.class);
+        toAddPicture.putExtra(EDIT_PICTURE, false); //This means that we are adding a new picture instead of editing one already.
         toAddPicture.putExtra(ALBUM_NAME, albumName);
         startActivity(toAddPicture);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        Intent toEditPicture = new Intent(this, AddPictureActivity.class);
+        toEditPicture.putExtra(EDIT_PICTURE, true); //This means that we are editing a picture already present in the album.
+        toEditPicture.putExtra(ALBUM_NAME, albumName);
+        toEditPicture.putExtra(ALBUM_PICTURE_PATH, imagePaths[position]);
+        toEditPicture.putExtra(ALBUM_DESCRIPTION, descriptions[position]);
     }
 
 

@@ -53,7 +53,7 @@ public class InsideScrapBook extends FragmentActivity implements LandscapePagesF
         String[] imagePaths = toStringArray(prefs.getString( albumName + ALBUM_PICTURE_PATH, ""));
         Bitmap[] images = new Bitmap[imagePaths.length];
         for (int index = 0; index < images.length; index++) {
-            images[index] = decodeSampledBitmapFromResource(getResources(), 1, );
+            images[index] = BitmapFactory.decodeFile(imagePaths[index]);
         }
         LeftPage.setPics(images);
         RightPage.setDescs(descs);

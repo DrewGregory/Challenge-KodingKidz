@@ -25,6 +25,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         /*
             Because SharedPreferences doesn't carry arrays, we are storing a giant string with each element separated by tabs.
          */
+
         if (prefs.getBoolean("FirstTime", true)) {//If this is first time...
             SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean("FirstTime", false);
@@ -86,5 +87,10 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         Intent openBook = new Intent(this, InsideScrapBook.class);
         openBook.putExtra(ALBUM_NAME, albums[position]);
        startActivity(openBook);
+    }
+    @Override
+    public void onClick(View search) {
+        onSearchRequested()
+        //https://www.youtube.com/watch?v=EmOqp_uAtUQ
     }
 }

@@ -16,7 +16,8 @@ import android.widget.EditText;
 public class AddAlbumActivity extends ActionBarActivity {
     final public String SHARED_PREFS = "com.kodingkidz.alzhelp.sharedPreferences";
     final public String ALBUMS = "com.kodingkidz.alzhelp.albums";
-
+    final public String ALBUM_COLOR = "com.kodingkidz.alzhelp.albumColor";
+    final public int RED = 1, BLUE = 2, GREEN = 3, PINK = 4, PURPLE = 5, YELLOW = 6;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +41,6 @@ public class AddAlbumActivity extends ActionBarActivity {
 
         switch (id) {
             case android.R.id.home:
-                createAlbum(findViewById(R.id.add_Album));
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
         }
@@ -50,11 +50,35 @@ public class AddAlbumActivity extends ActionBarActivity {
     }
 
     public void createAlbum(View v) {
+        int color;
+        switch (v.getId()) {
+            case R.id.redButton:
+                color = RED;
+                break;
+            case R.id.blueButton:
+                color = BLUE;
+                break;
+            case R.id.greenButton:
+                color = GREEN;
+                break;
+            case R.id.pinkButton:
+                color = PINK;
+                break;
+            case R.id.purpleButton:
+                color = PURPLE;
+                break;
+            case R.id.yellowButton:
+                color = YELLOW;
+                break;
+            default:
+                color = RED;
+        }
         EditText name = (EditText) findViewById(R.id.albumNameText);
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = prefs.edit();
         String separator = "\t";
         edit.putString(ALBUMS, prefs.getString(ALBUMS, "") + separator + name.getText().toString());
+        edit.putInt(name.getText().toString() + ALBUM_COLOR, color);
         edit.apply();
         Intent backToSettings = new Intent(this, SettingsActivity.class);
         startActivity(backToSettings);

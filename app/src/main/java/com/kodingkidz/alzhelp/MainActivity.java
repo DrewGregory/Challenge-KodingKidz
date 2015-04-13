@@ -16,6 +16,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     final public String SHARED_PREFS = "com.kodingkidz.alzhelp.sharedPreferences";
     final public String ALBUMS = "com.kodingkidz.alzhelp.albums";
     final public String ALBUM_NAME = "com.kodingkidz.alzhelp.albumName";
+    final public String ALBUM_COLOR = "com.kodingkidz.alzhelp.albumColor";
     String[] albums;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +36,12 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
         }
         albums = toAlbumArray(prefs.getString(ALBUMS, ""));
+        int[] albumColors = new int[albums.length];
+        for (int index = 0; index < albumColors.length; index++) {
+            albumColors[index] = prefs.getInt(albums[index] + ALBUM_COLOR, 1);
+        }
         ListView listView = (ListView) findViewById(R.id.listView);
-        ArrayAdapter adapter = new HomeScrapBookAdapter(this, albums);
+        ArrayAdapter adapter = new HomeScrapBookAdapter(this, albums,albumColors);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this); // I put the listener inside this class
     }
@@ -88,9 +93,9 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         openBook.putExtra(ALBUM_NAME, albums[position]);
        startActivity(openBook);
     }
-    @Override
+    /*@Override
     public void onClick(View search) {
         onSearchRequested()
         //https://www.youtube.com/watch?v=EmOqp_uAtUQ
-    }
+    }*/
 }

@@ -17,6 +17,7 @@ public class SettingsActivity extends ActionBarActivity implements AdapterView.O
     final public String SHARED_PREFS = "com.kodingkidz.alzhelp.sharedPreferences";
     final public String ALBUMS = "com.kodingkidz.alzhelp.albums";
     final public String ALBUM_NAME = "com.kodingkidz.alzhelp.albumName";
+    final public String ALBUM_COLOR = "com.kodingkidz.alzhelp.albumColor";
     String[] albums;
 
     @Override
@@ -26,7 +27,11 @@ public class SettingsActivity extends ActionBarActivity implements AdapterView.O
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         ListView lv = (ListView) findViewById(R.id.listOfCurrentAlbums);
         albums = toAlbumArray(prefs.getString(ALBUMS, ""));
-        lv.setAdapter(new HomeScrapBookAdapter(this, albums));
+        int[] albumColors = new int[albums.length];
+        for (int index = 0; index < albumColors.length; index++) {
+            albumColors[index] = prefs.getInt(albums[index] + ALBUM_COLOR, 1);
+        }
+        lv.setAdapter(new HomeScrapBookAdapter(this, albums, albumColors));
         lv.setOnItemClickListener(this);
     }
 
@@ -53,13 +58,6 @@ public class SettingsActivity extends ActionBarActivity implements AdapterView.O
         return super.onOptionsItemSelected(item);
     }
 
-    public void addPicture(View button) {
-        startActivity(new Intent(this, AddPictureActivity.class));
-    }
-
-    public void addDescription(View button) {
-        startActivity(new Intent(this, AddDescriptionActivity.class));
-    }
 
     public void addAlbum(View button) {
         startActivity(new Intent(this, AddAlbumActivity.class));

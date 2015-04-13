@@ -25,6 +25,7 @@ public class EditAlbumActivity extends ActionBarActivity implements AdapterView.
     final public String ALBUM_DESCRIPTION = "com.kodingkidz.alzhelp.albumDescription";
     final public String ALBUM_PICTURE_PATH = "com.kodingkidz.alzhelp.albumPicturePath";
     final public String EDIT_PICTURE = "com.kodingkidz.alzhelp.editPicture";
+    final public String ALBUMS = "com.kodingkidz.alzhelp.albums";
     SharedPreferences prefs;
     String albumName;
     Picture[] pictures;
@@ -37,7 +38,7 @@ public class EditAlbumActivity extends ActionBarActivity implements AdapterView.
         albumName = getIntent().getStringExtra(ALBUM_NAME);
         setTitle("Edit " + albumName);
         descriptions = toStringArray(prefs.getString(albumName + ALBUM_DESCRIPTION, ""));
-        imagePaths = toStringArray(prefs.getString( albumName + ALBUM_PICTURE_PATH, ""));
+        imagePaths = toStringArray(prefs.getString(albumName + ALBUM_PICTURE_PATH, ""));
         pictures = new Picture[Math.min(descriptions.length, imagePaths.length)];
         for (int index = 0; index < pictures.length; index++) {
             pictures[index] = new Picture();
@@ -46,6 +47,7 @@ public class EditAlbumActivity extends ActionBarActivity implements AdapterView.
         }
         ListView lv = (ListView) findViewById(R.id.currentPicturesListView);
         lv.setAdapter(new EditAlbumAdapter(this));
+        lv.setOnItemClickListener(this);
     }
 
 
@@ -80,6 +82,7 @@ public class EditAlbumActivity extends ActionBarActivity implements AdapterView.
         toEditPicture.putExtra(ALBUM_NAME, albumName);
         toEditPicture.putExtra(ALBUM_PICTURE_PATH, imagePaths[position]);
         toEditPicture.putExtra(ALBUM_DESCRIPTION, descriptions[position]);
+        startActivity(toEditPicture);
     }
 
 
@@ -128,5 +131,24 @@ public class EditAlbumActivity extends ActionBarActivity implements AdapterView.
             }
         }
         return tempAlbums;
+    }
+
+    public void deleteAlbum(View v){
+        String albums = prefs.getString(ALBUMS, "");
+        String[] albumsArray = toStringArray(albums);
+        String separator = "\t";
+        String newAlbums = "";
+        for (String album : albumsArray) {
+            if (!album.equals(albumName)) {
+                newAlbums += separator + album;
+            }
+        }
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(ALBUMS, newAlbums);
+        editor.putString(albumName + ALBUM_DESCRIPTION, ""); //Clears Descriptions and Pictures from old album.
+        editor.putString(albumName + ALBUM_PICTURE_PATH, "");
+        editor.commit();
+        Intent back = new Intent(this, SettingsActivity.class);
+        startActivity(back);
     }
 }

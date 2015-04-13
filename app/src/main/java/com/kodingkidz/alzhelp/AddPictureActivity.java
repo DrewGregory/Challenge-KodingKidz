@@ -1,10 +1,8 @@
 package com.kodingkidz.alzhelp;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Image;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.app.NavUtils;
@@ -18,31 +16,15 @@ import android.app.AlertDialog;
 
 import android.content.DialogInterface;
 
-import android.content.Intent;
-
 import android.database.Cursor;
 
 import android.graphics.Bitmap;
 
 import android.graphics.BitmapFactory;
 
-import android.net.Uri;
-
-import android.os.Bundle;
-
-import android.app.Activity;
-
 import android.os.Environment;
 
-import android.provider.MediaStore;
-
 import android.util.Log;
-
-import android.view.Menu;
-
-import android.view.View;
-
-import android.widget.Button;
 
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -67,7 +49,7 @@ public class AddPictureActivity extends ActionBarActivity {
     String albumName, picturePath;
     boolean edit;
     SharedPreferences prefs;
-    int startOfOldPath, length;
+    int startOfOldPath, startOfOldDescription, pathLength, descriptionLength;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,9 +62,13 @@ public class AddPictureActivity extends ActionBarActivity {
         if (edit) {
             setTitle("Edit Picture");
             button.setText("Edit Picture");
-            String oldPath = prefs.getString(ALBUM_PICTURE_PATH, "");
+            String oldPath = getIntent().getStringExtra(ALBUM_PICTURE_PATH);
             startOfOldPath = prefs.getString(albumName + ALBUM_PICTURE_PATH, "").indexOf(oldPath);
-            length = oldPath.length();
+            String oldDescription = getIntent().getStringExtra(ALBUM_DESCRIPTION);
+            startOfOldDescription = prefs.getString(albumName + ALBUM_DESCRIPTION, "").indexOf(oldDescription);
+            pathLength = oldPath.length();
+            descriptionLength = oldDescription.length();
+
         }
         imageButton.setOnClickListener(new View.OnClickListener() {
 
@@ -134,6 +120,7 @@ public class AddPictureActivity extends ActionBarActivity {
     public void addPicture (View v) {
         EditText descriptionInput = (EditText) findViewById(R.id.descriptionEditText);
         String descriptionText = descriptionInput.getText().toString();
+
         SharedPreferences.Editor editor = prefs.edit();
         String separator = "\t";
         if (!edit) {
@@ -144,15 +131,59 @@ public class AddPictureActivity extends ActionBarActivity {
         } else {
             String previousPathContent = prefs.getString(albumName + ALBUM_PICTURE_PATH, "");
             String newPathContent = "";
-            if (startOfOldPath + length < previousPathContent.length()) {
+            if (startOfOldDescription + pathLength < previousPathContent.length()) {
                 newPathContent = previousPathContent.substring(0, startOfOldPath) + picturePath + previousPathContent.substring(startOfOldPath
-                        + length);
+                        + pathLength);
             } else {
                 newPathContent = previousPathContent.substring(0, startOfOldPath) + picturePath;
             }
             editor.putString(albumName + ALBUM_PICTURE_PATH, newPathContent);
+            String previousDescContent = prefs.getString(albumName + ALBUM_DESCRIPTION, "");
+            String newDescContent = "";
+            if (startOfOldDescription + descriptionLength < previousDescContent.length()) {
+                newDescContent = previousDescContent.substring(0, startOfOldDescription) + descriptionText + previousDescContent.substring(startOfOldDescription
+                        + descriptionLength);
+            } else {
+                newDescContent = previousDescContent.substring(0, startOfOldDescription) + descriptionText;
+            }
+
+            editor.putString(albumName + ALBUM_DESCRIPTION, newDescContent);
         }
         editor.commit();
+        Intent back = new Intent(this, EditAlbumActivity.class);
+        back.putExtra(ALBUM_NAME, albumName);
+        startActivity(back);
+    }
+
+    public void deletePicture(View v) {
+        EditText descriptionInput = (EditText) findViewById(R.id.descriptionEditText);
+        String descriptionText = descriptionInput.getText().toString();
+
+        SharedPreferences.Editor editor = prefs.edit();
+        String separator = "\t";
+        if (edit) {
+            String previousPathContent = prefs.getString(albumName + ALBUM_PICTURE_PATH, "");
+            String newPathContent = "";
+            if (startOfOldDescription + pathLength < previousPathContent.length()) {
+                newPathContent = previousPathContent.substring(0, startOfOldPath - 1)+ previousPathContent.substring(startOfOldPath + 1
+                        + pathLength);
+            } else {
+                newPathContent = previousPathContent.substring(0, startOfOldPath - 1);
+            }
+            editor.putString(albumName + ALBUM_PICTURE_PATH, newPathContent);
+            String previousDescContent = prefs.getString(albumName + ALBUM_DESCRIPTION, "");
+            String newDescContent = "";
+            if (startOfOldDescription + descriptionLength < previousDescContent.length()) {
+                newDescContent = previousDescContent.substring(0, startOfOldDescription - 1) + previousDescContent.substring(startOfOldDescription + 1
+                        + descriptionLength);
+            } else {
+                newDescContent = previousDescContent.substring(0, startOfOldDescription - 1) ;
+            }
+
+            editor.putString(albumName + ALBUM_DESCRIPTION, newDescContent);
+            editor.commit();
+        }
+
         Intent back = new Intent(this, EditAlbumActivity.class);
         back.putExtra(ALBUM_NAME, albumName);
         startActivity(back);

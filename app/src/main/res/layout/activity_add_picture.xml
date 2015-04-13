@@ -36,8 +36,9 @@
         android:layout_height="0dp"
         android:id="@+id/deletePictureButton"
         android:layout_weight="1"
+        android:background="#ffff5660"
         android:text="Delete Picture"
-        android:onClick="addPicture"/>
+        android:onClick="deletePicture"/>
 
 
 </LinearLayout>

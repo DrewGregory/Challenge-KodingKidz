@@ -30,8 +30,8 @@ public class LandscapePagesFragment extends android.support.v4.app.Fragment {
     private static final String POSITION = "position";
     private int position;
     //TODO Replace these arrays with a dynamic list.
-    static int[] picIds = {R.drawable.demo_pic_one, R.drawable.demo_pic_two, R.drawable.demo_pic_three};
-    static String[] descs = {"A picture of my grandparents.", "A picture of the Gaffneys, the Mylanders, and others.", "The whole third generation! Andrew, Mac, Paige, Elias, Drew, John, Sara, and Adam."};
+    static int[] picIds;
+    static String[] descs;
 
     private OnLandscapeFragmentInteractionListener mListener;
 

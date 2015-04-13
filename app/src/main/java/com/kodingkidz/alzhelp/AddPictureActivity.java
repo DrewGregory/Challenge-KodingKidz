@@ -68,6 +68,11 @@ public class AddPictureActivity extends ActionBarActivity {
             startOfOldDescription = prefs.getString(albumName + ALBUM_DESCRIPTION, "").indexOf(oldDescription);
             pathLength = oldPath.length();
             descriptionLength = oldDescription.length();
+            Bitmap oldPic = BitmapFactory.decodeFile(oldPath);
+            imageButton.setImageBitmap(oldPic);
+            EditText descriptionInput = (EditText) findViewById(R.id.descriptionEditText);
+            descriptionInput.setText(oldDescription);
+
 
         }
         imageButton.setOnClickListener(new View.OnClickListener() {

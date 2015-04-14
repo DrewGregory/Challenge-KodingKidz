@@ -160,13 +160,17 @@ public class InsideScrapBook extends FragmentActivity implements LandscapePagesF
 
         String[] albumsInArray = stringInOneLine.split("\t");
         //Because it adds a tab before the first album in the createAlbum() method, we have to remove the first element
-        String[] tempAlbums = new String[albumsInArray.length - 1];
         if (albumsInArray.length > 0) {
-            for (int index = 1; index < albumsInArray.length; index++) {
-                tempAlbums[index - 1] = albumsInArray[index];
+            String[] tempAlbums = new String[albumsInArray.length - 1];
+            if (albumsInArray.length > 0) {
+                for (int index = 1; index < albumsInArray.length; index++) {
+                    tempAlbums[index - 1] = albumsInArray[index];
+                }
             }
+            return tempAlbums;
         }
-        return tempAlbums;
+        return new String[]{""};
+
     }
 
 

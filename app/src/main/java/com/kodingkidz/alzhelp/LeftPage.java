@@ -28,7 +28,7 @@ import java.lang.ref.WeakReference;
 public class LeftPage extends android.support.v4.app.Fragment {
 
     private static final String ARG_POSITION = "Right Page Position";
-    private static Bitmap[] pics;
+    public static Bitmap[] pics;
     public static int NUM_PAGES;
     int screenWidth, screenLength;
     ImageView currentImage;

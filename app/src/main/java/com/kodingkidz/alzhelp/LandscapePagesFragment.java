@@ -69,8 +69,8 @@ public class LandscapePagesFragment extends android.support.v4.app.Fragment {
         View view = inflater.inflate(R.layout.fragment_landscape_pages, container, false);
         ImageView image = (ImageView) view.findViewById(R.id.image);
         TextView text = (TextView) view.findViewById(R.id.text);
-        new BitmapWorkerTask(image).execute();  //Uses ASyncTask to load Bitmap off UI Thread.
-        text.setText(descs[position]);
+        image.setImageBitmap(LeftPage.pics[position]);
+        text.setText(RightPage.descs[position]);
         TextView pLeftNum = (TextView) view.findViewById(R.id.land_left_page_num);
         TextView pRightNum = (TextView) view.findViewById(R.id.land_right_page_num);
         pLeftNum.setText((position + 1) * 2 - 1 + "");

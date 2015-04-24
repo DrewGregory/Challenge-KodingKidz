@@ -21,7 +21,7 @@ import android.widget.ImageView;
 import java.lang.ref.WeakReference;
 
 
-public class InsideScrapBook extends FragmentActivity implements LandscapePagesFragment.OnLandscapeFragmentInteractionListener {
+public class InsideScrapBook extends FragmentActivity {
     final public String SHARED_PREFS = "com.kodingkidz.alzhelp.sharedPreferences";
     final public String ALBUM_NAME = "com.kodingkidz.alzhelp.albumName";
     final public String ALBUM_DESCRIPTION = "com.kodingkidz.alzhelp.albumDescription";
@@ -52,8 +52,12 @@ public class InsideScrapBook extends FragmentActivity implements LandscapePagesF
         descs = toStringArray(prefs.getString(albumName + ALBUM_DESCRIPTION, ""));
         String[] imagePaths = toStringArray(prefs.getString( albumName + ALBUM_PICTURE_PATH, ""));
         Bitmap[] images = new Bitmap[imagePaths.length];
-        for (int index = 0; index < images.length; index++) {
-            images[index] = BitmapFactory.decodeFile(imagePaths[index]);
+        try {
+            for (int index = 0; index < images.length; index++) {
+                images[index] = BitmapFactory.decodeFile(imagePaths[index]);
+            }
+        } catch(OutOfMemoryError e) {
+
         }
         LeftPage.setPics(images);
         RightPage.setDescs(descs);
@@ -63,13 +67,11 @@ public class InsideScrapBook extends FragmentActivity implements LandscapePagesF
             // Instantiate a ViewPager and a PagerAdapter for landscape orientation.
             ViewPager bothPages = (ViewPager) findViewById(R.id.landscape_pages);
             PagerAdapter bothPagesAdapter = new LandscapePageAdapter(getSupportFragmentManager());
-            //TODO bothPages.setPageTransformer(false, new LandscapePageAnimation()); Uncomment when we make an nice page flip animation.
             bothPages.setAdapter(bothPagesAdapter);
         } else {
             //This one is for portrait orientation.
             ViewPager singlePage = (ViewPager) findViewById(R.id.port_page);
             PagerAdapter singlePageAdapter = new PortraitPageAdapter(getSupportFragmentManager());
-            //TODO Make a PortraitPageAnimation and setPageTransformer(new PortraitPageAnimation());
             singlePage.setAdapter(singlePageAdapter);
         }
 

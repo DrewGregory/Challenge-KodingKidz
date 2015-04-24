@@ -40,10 +40,14 @@ public class EditAlbumActivity extends ActionBarActivity implements AdapterView.
         descriptions = toStringArray(prefs.getString(albumName + ALBUM_DESCRIPTION, ""));
         imagePaths = toStringArray(prefs.getString(albumName + ALBUM_PICTURE_PATH, ""));
         pictures = new Picture[Math.min(descriptions.length, imagePaths.length)];
-        for (int index = 0; index < pictures.length; index++) {
-            pictures[index] = new Picture();
-            pictures[index].description = descriptions[index];
-            pictures[index].imageBitmap = BitmapFactory.decodeFile(imagePaths[index]);
+        try {
+            for (int index = 0; index < pictures.length; index++) {
+                pictures[index] = new Picture();
+                pictures[index].description = descriptions[index];
+                pictures[index].imageBitmap = BitmapFactory.decodeFile(imagePaths[index]);
+            }
+        } catch(OutOfMemoryError e) {
+
         }
         ListView lv = (ListView) findViewById(R.id.currentPicturesListView);
         lv.setAdapter(new EditAlbumAdapter(this));
@@ -73,6 +77,7 @@ public class EditAlbumActivity extends ActionBarActivity implements AdapterView.
         toAddPicture.putExtra(EDIT_PICTURE, false); //This means that we are adding a new picture instead of editing one already.
         toAddPicture.putExtra(ALBUM_NAME, albumName);
         startActivity(toAddPicture);
+        finish();
     }
 
     @Override
@@ -83,6 +88,7 @@ public class EditAlbumActivity extends ActionBarActivity implements AdapterView.
         toEditPicture.putExtra(ALBUM_PICTURE_PATH, imagePaths[position]);
         toEditPicture.putExtra(ALBUM_DESCRIPTION, descriptions[position]);
         startActivity(toEditPicture);
+        finish();
     }
 
 
@@ -124,13 +130,15 @@ public class EditAlbumActivity extends ActionBarActivity implements AdapterView.
     String[] toStringArray (String stringInOneLine) {
         String[] albumsInArray = stringInOneLine.split("\t");
         //Because it adds a tab before the first album in the createAlbum() method, we have to remove the first element
-        String[] tempAlbums = new String[albumsInArray.length - 1];
+
         if (albumsInArray.length > 0) {
+            String[] tempAlbums = new String[albumsInArray.length - 1];
             for (int index = 1; index < albumsInArray.length; index++) {
                 tempAlbums[index - 1] = albumsInArray[index];
             }
+            return tempAlbums;
         }
-        return tempAlbums;
+        return new String[] {""};
     }
 
     public void deleteAlbum(View v){

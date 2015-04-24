@@ -1,6 +1,10 @@
 package com.kodingkidz.alzhelp;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.audiofx.BassBoost;
@@ -50,30 +54,36 @@ public class AddAlbumActivity extends ActionBarActivity {
     }
 
     public void createAlbum(View v) {
+        EditText name = (EditText) findViewById(R.id.albumNameText);
+        if (name.getText().toString().trim().equals("")) {
+            EmptyAlbumDialogFragment fragment = new EmptyAlbumDialogFragment();
+            fragment.show(getFragmentManager(), "Empty Album");
+            return;
+        }
         int color;
         switch (v.getId()) {
-            case R.id.redButton:
+            case R.id.redButton: //lets you make the album red
                 color = RED;
                 break;
-            case R.id.blueButton:
+            case R.id.blueButton: //lets you make the album blue
                 color = BLUE;
                 break;
-            case R.id.greenButton:
+            case R.id.greenButton: //lets you make the album green
                 color = GREEN;
                 break;
-            case R.id.pinkButton:
+            case R.id.pinkButton: //lets you make the album pink
                 color = PINK;
                 break;
-            case R.id.purpleButton:
+            case R.id.purpleButton: //lets you make the album purple
                 color = PURPLE;
                 break;
-            case R.id.yellowButton:
+            case R.id.yellowButton: //lets you make the album yellow
                 color = YELLOW;
                 break;
             default:
                 color = RED;
         }
-        EditText name = (EditText) findViewById(R.id.albumNameText);
+
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = prefs.edit();
         String separator = "\t";
@@ -82,5 +92,25 @@ public class AddAlbumActivity extends ActionBarActivity {
         edit.apply();
         Intent backToSettings = new Intent(this, SettingsActivity.class);
         startActivity(backToSettings);
+    }
+
+    /**
+     * In case they try to add an album that doesn't have a name.
+     *
+     */
+    static public class EmptyAlbumDialogFragment extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the Builder class for convenient dialog construction
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("You still haven't written a name for your album!")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                        }
+                    }).setTitle("Empty Album Name");
+            // Create the AlertDialog object and return it
+            return builder.create();
+        }
     }
 }

@@ -21,7 +21,6 @@ import android.widget.TextView;
 public class RightPage extends android.support.v4.app.Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String PAGE = "The Page";
-    //TODO: Replace this test code with the actual, customizable descriptions to come.
     static String[] descs;
     public static int NUM_PAGES;
     private String currentDesc;

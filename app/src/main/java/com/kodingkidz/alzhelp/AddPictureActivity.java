@@ -1,5 +1,7 @@
 package com.kodingkidz.alzhelp;
 
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -63,7 +65,7 @@ public class AddPictureActivity extends ActionBarActivity {
             setTitle("Edit Picture");
             button.setText("Edit Picture");
             String oldPath = getIntent().getStringExtra(ALBUM_PICTURE_PATH);
-            startOfOldPath = prefs.getString(albumName + ALBUM_PICTURE_PATH, "").indexOf(oldPath);
+            startOfOldPath = prefs.getString(albumName + ALBUM_PICTURE_PATH, "").indexOf(oldPath); //Used for add/delete/edit picture buttons.
             String oldDescription = getIntent().getStringExtra(ALBUM_DESCRIPTION);
             startOfOldDescription = prefs.getString(albumName + ALBUM_DESCRIPTION, "").indexOf(oldDescription);
             pathLength = oldPath.length();
@@ -95,37 +97,22 @@ public class AddPictureActivity extends ActionBarActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == android.R.id.home) {
-            EditText descriptionInput = (EditText) findViewById(R.id.descriptionEditText);
-            String descriptionText = descriptionInput.getText().toString();
-            SharedPreferences.Editor editor = prefs.edit();
-            String separator = "\t";
-            String previousPathContent = prefs.getString(albumName + ALBUM_PICTURE_PATH, "");
-            editor.putString(albumName + ALBUM_PICTURE_PATH, previousPathContent + separator + picturePath);
-            String previousDescContent = prefs.getString(albumName + ALBUM_DESCRIPTION, "");
-            editor.putString(albumName + ALBUM_DESCRIPTION, previousDescContent + separator + descriptionText);
-            editor.apply();
-            NavUtils.navigateUpFromSameTask(this);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     ImageView imageButton;
 
+    /**
+     * Called by onClick of Add Picture Button.
+     * @param v
+     */
     public void addPicture (View v) {
         EditText descriptionInput = (EditText) findViewById(R.id.descriptionEditText);
-        String descriptionText = descriptionInput.getText().toString();
-
+        String descriptionText = descriptionInput.getText().toString(); //Just to avoid errors.
+        if (descriptionText.trim().equals("")) {
+            EmptyDescriptionDialogFragment fragment = new EmptyDescriptionDialogFragment();
+            fragment.show(getFragmentManager(), "No description");
+            return;
+        }
         SharedPreferences.Editor editor = prefs.edit();
         String separator = "\t";
         if (!edit) {
@@ -136,7 +123,7 @@ public class AddPictureActivity extends ActionBarActivity {
         } else {
             String previousPathContent = prefs.getString(albumName + ALBUM_PICTURE_PATH, "");
             String newPathContent = "";
-            if (startOfOldDescription + pathLength < previousPathContent.length()) {
+            if (startOfOldPath + pathLength < previousPathContent.length()) {
                 newPathContent = previousPathContent.substring(0, startOfOldPath) + picturePath + previousPathContent.substring(startOfOldPath
                         + pathLength);
             } else {
@@ -154,12 +141,16 @@ public class AddPictureActivity extends ActionBarActivity {
 
             editor.putString(albumName + ALBUM_DESCRIPTION, newDescContent);
         }
-        editor.commit();
+        editor.commit(); //The changes to SharedPreferences have to be applied before can move on.
         Intent back = new Intent(this, EditAlbumActivity.class);
         back.putExtra(ALBUM_NAME, albumName);
         startActivity(back);
     }
 
+    /**
+     * Called by onClick of delete Picture button.
+     * @param v
+     */
     public void deletePicture(View v) {
         EditText descriptionInput = (EditText) findViewById(R.id.descriptionEditText);
         String descriptionText = descriptionInput.getText().toString();
@@ -186,7 +177,7 @@ public class AddPictureActivity extends ActionBarActivity {
             }
 
             editor.putString(albumName + ALBUM_DESCRIPTION, newDescContent);
-            editor.commit();
+            editor.commit();  //The changes to SharedPreferences have to be applied before can move on.
         }
 
         Intent back = new Intent(this, EditAlbumActivity.class);
@@ -351,15 +342,31 @@ public class AddPictureActivity extends ActionBarActivity {
                 c.close();
 
                 Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
-
-                Log.w("path of image:", picturePath + "");
-
                 imageButton.setImageBitmap(thumbnail);
 
             }
 
         }
 
+    }
+    /**
+     * In case they try to add/edit a picture that doesn't have a description.
+     *
+     */
+    static public class EmptyDescriptionDialogFragment extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the Builder class for convenient dialog construction
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("You still haven't written a description!")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                        }
+                    }).setTitle("Empty Description");
+            // Create the AlertDialog object and return it
+            return builder.create();
+        }
     }
 
 }

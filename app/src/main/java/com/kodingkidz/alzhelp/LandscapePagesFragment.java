@@ -19,9 +19,6 @@ import java.lang.ref.WeakReference;
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link com.kodingkidz.alzhelp.LandscapePagesFragment.OnLandscapeFragmentInteractionListener} interface
- * to handle interaction events.
  * Use the {@link LandscapePagesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -29,11 +26,8 @@ public class LandscapePagesFragment extends android.support.v4.app.Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String POSITION = "position";
     private int position;
-    //TODO Replace these arrays with a dynamic list.
     static int[] picIds;
     static String[] descs;
-
-    private OnLandscapeFragmentInteractionListener mListener;
 
     /**
      * Use this factory method to create a new instance of
@@ -73,41 +67,18 @@ public class LandscapePagesFragment extends android.support.v4.app.Fragment {
         text.setText(RightPage.descs[position]);
         TextView pLeftNum = (TextView) view.findViewById(R.id.land_left_page_num);
         TextView pRightNum = (TextView) view.findViewById(R.id.land_right_page_num);
-        pLeftNum.setText((position + 1) * 2 - 1 + "");
+        pLeftNum.setText((position + 1) * 2 - 1 + ""); //For setting the page numbers...
         pRightNum.setText((position + 1) * 2 + "");
         return view;
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnLandscapeFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnLandscapeFragmentInteractionListener");
-        }
-    }
+
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnLandscapeFragmentInteractionListener {
-        //TODO Add something in here if I need Activity interaction.
-    }
 
     /**
      * From Android Developer's Website.

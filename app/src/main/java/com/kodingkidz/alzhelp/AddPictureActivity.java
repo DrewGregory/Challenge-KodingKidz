@@ -124,11 +124,11 @@ public class AddPictureActivity extends ActionBarActivity {
             String previousPathContent = prefs.getString(albumName + ALBUM_PICTURE_PATH, "");
             String newPathContent = "";
             if (startOfOldPath + pathLength < previousPathContent.length()) {
-                newPathContent = previousPathContent.substring(0, startOfOldPath) + picturePath + previousPathContent.substring(startOfOldPath
-                        + pathLength);
+                newPathContent = previousPathContent.substring(0, startOfOldPath) + picturePath + previousPathContent.substring(startOfOldPath + pathLength);
             } else {
                 newPathContent = previousPathContent.substring(0, startOfOldPath) + picturePath;
             }
+            Log.i("Koding Kidz", "Edited Path: "  + newPathContent);
             editor.putString(albumName + ALBUM_PICTURE_PATH, newPathContent);
             String previousDescContent = prefs.getString(albumName + ALBUM_DESCRIPTION, "");
             String newDescContent = "";
@@ -142,9 +142,7 @@ public class AddPictureActivity extends ActionBarActivity {
             editor.putString(albumName + ALBUM_DESCRIPTION, newDescContent);
         }
         editor.commit(); //The changes to SharedPreferences have to be applied before can move on.
-        Intent back = new Intent(this, EditAlbumActivity.class);
-        back.putExtra(ALBUM_NAME, albumName);
-        startActivity(back);
+        finish();
     }
 
     /**
@@ -180,9 +178,7 @@ public class AddPictureActivity extends ActionBarActivity {
             editor.commit();  //The changes to SharedPreferences have to be applied before can move on.
         }
 
-        Intent back = new Intent(this, EditAlbumActivity.class);
-        back.putExtra(ALBUM_NAME, albumName);
-        startActivity(back);
+        finish();
     }
 
     private void selectImage() {

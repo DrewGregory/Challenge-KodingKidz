@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class EditAlbumActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
@@ -30,13 +31,10 @@ public class EditAlbumActivity extends ActionBarActivity implements AdapterView.
     String albumName;
     Picture[] pictures;
     String[] imagePaths, descriptions;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_album);
-        prefs = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-        albumName = getIntent().getStringExtra(ALBUM_NAME);
-        setTitle("Edit " + albumName);
+    protected void onResume() { //This stuff is in onResume so the EditAlbumActivity refreshes itself when you click "add/edit picture" and it AddPictureActivity pops off the stack.
+        super.onResume();
         descriptions = toStringArray(prefs.getString(albumName + ALBUM_DESCRIPTION, ""));
         imagePaths = toStringArray(prefs.getString(albumName + ALBUM_PICTURE_PATH, ""));
         pictures = new Picture[Math.min(descriptions.length, imagePaths.length)];
@@ -47,11 +45,24 @@ public class EditAlbumActivity extends ActionBarActivity implements AdapterView.
                 pictures[index].imageBitmap = BitmapFactory.decodeFile(imagePaths[index]);
             }
         } catch(OutOfMemoryError e) {
-
+            //Definitely change this.....
+            Toast.makeText(getApplicationContext(), "Cloing the activity to save some memory...", Toast.LENGTH_LONG).show();
+            finish();
         }
         ListView lv = (ListView) findViewById(R.id.currentPicturesListView);
         lv.setAdapter(new EditAlbumAdapter(this));
         lv.setOnItemClickListener(this);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_edit_album);
+        prefs = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        albumName = getIntent().getStringExtra(ALBUM_NAME);
+        setTitle("Edit " + albumName);
+
+
     }
 
 
@@ -77,7 +88,6 @@ public class EditAlbumActivity extends ActionBarActivity implements AdapterView.
         toAddPicture.putExtra(EDIT_PICTURE, false); //This means that we are adding a new picture instead of editing one already.
         toAddPicture.putExtra(ALBUM_NAME, albumName);
         startActivity(toAddPicture);
-        finish();
     }
 
     @Override
@@ -88,7 +98,6 @@ public class EditAlbumActivity extends ActionBarActivity implements AdapterView.
         toEditPicture.putExtra(ALBUM_PICTURE_PATH, imagePaths[position]);
         toEditPicture.putExtra(ALBUM_DESCRIPTION, descriptions[position]);
         startActivity(toEditPicture);
-        finish();
     }
 
 
@@ -156,7 +165,6 @@ public class EditAlbumActivity extends ActionBarActivity implements AdapterView.
         editor.putString(albumName + ALBUM_DESCRIPTION, ""); //Clears Descriptions and Pictures from old album.
         editor.putString(albumName + ALBUM_PICTURE_PATH, "");
         editor.commit();
-        Intent back = new Intent(this, SettingsActivity.class);
-        startActivity(back);
+        finish();
     }
 }

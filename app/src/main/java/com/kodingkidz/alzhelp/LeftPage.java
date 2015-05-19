@@ -95,7 +95,6 @@ public class LeftPage extends android.support.v4.app.Fragment {
 
     @Override
     public void onDetach() {
-
         super.onDetach();
     }
 
